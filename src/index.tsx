@@ -17,6 +17,12 @@ const JsiModule = NativeModules.JsiModule
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return JsiModule.multiply(a, b);
+const jsiCore = global as unknown as {
+  multiply(a: number, b: number): number;
+};
+
+JsiModule.bridgeJSIFunctions();
+
+export function multiply(a: number, b: number): number {
+  return jsiCore.multiply(a, b);
 }
