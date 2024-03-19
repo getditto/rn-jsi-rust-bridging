@@ -15,7 +15,7 @@ import { multiply } from 'react-native-jsi-module';
 
 // ...
 
-const result = await multiply(3, 7);
+const result = multiply(3, 7);
 ```
 
 ## Contributing
