@@ -12,6 +12,8 @@ import com.facebook.react.module.annotations.ReactModule;
 public class JsiModuleModule extends ReactContextBaseJavaModule {
   public static final String NAME = "JsiModule";
 
+  private native void jniBridgeJSIFunctions(ReactApplicationContext context, long jsi_pointer);
+
   public JsiModuleModule(ReactApplicationContext reactContext) {
     super(reactContext);
   }
@@ -22,16 +24,19 @@ public class JsiModuleModule extends ReactContextBaseJavaModule {
     return NAME;
   }
 
-  static {
-    System.loadLibrary("react-native-jsi-module");
-  }
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  public boolean bridgeJSIFunctions() {
+    try {
+      System.loadLibrary("react-native-jsi-module");
 
-  private static native double nativeMultiply(double a, double b);
-
-  // Example method
-  // See https://reactnative.dev/docs/native-modules-android
-  @ReactMethod
-  public void multiply(double a, double b, Promise promise) {
-    promise.resolve(nativeMultiply(a, b));
+      ReactApplicationContext context = getReactApplicationContext();
+      jniBridgeJSIFunctions(
+          context,
+          context.getJavaScriptContextHolder().get()
+      );
+      return true;
+    } catch (Exception exception) {
+      return false;
+    }
   }
 }
