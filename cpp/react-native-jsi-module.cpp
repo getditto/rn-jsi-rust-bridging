@@ -3,17 +3,17 @@
 
 extern "C"
 {
-  int multiply(int a, int b); // Declaration of the Rust function
+  double multiply(double a, double b); // Declaration of the Rust function
 }
 
 namespace jsimodule
 {
   void bridgeJSIFunctions(Runtime &jsi)
   {
-    // Define the `multiply` function using JSI idioms
-    auto multiplyFunction = Function::createFromHostFunction(
+    // Define `multiplyJSI` using JSI idioms.
+    auto multiplyJSI = Function::createFromHostFunction(
         jsi,
-        PropNameID::forAscii(jsi, "multiplyFunction"),
+        PropNameID::forAscii(jsi, "multiplyJSI"),
         2, // number of arguments
         [](Runtime &runtime, const Value &thisValue, const Value *arguments, size_t count) -> Value
         {
@@ -25,12 +25,11 @@ namespace jsimodule
           double a = arguments[0].asNumber();
           double b = arguments[1].asNumber();
 
-          return Value();
-//          return multiply(a, b);
+          return multiply(a, b);
         });
 
     // Export the `multiply` function to React Native's global object
-    jsi.global().setProperty(jsi, "multiply", std::move(multiplyFunction));
+    jsi.global().setProperty(jsi, "multiply", std::move(multiplyJSI));
   }
 
 } // namespace jsimodule
