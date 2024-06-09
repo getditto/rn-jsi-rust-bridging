@@ -4,5 +4,4 @@
 
 #import <React/RCTBridgeModule.h>
 @interface JsiModule : NSObject <RCTBridgeModule>
-
 @end

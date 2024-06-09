@@ -6,16 +6,16 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const JsiModule = NativeModules.JsiModule
-  ? NativeModules.JsiModule
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+const JsiModule =
+  NativeModules.JsiModule ??
+  new Proxy(
+    {},
+    {
+      get() {
+        throw new Error(LINKING_ERROR);
+      },
+    }
+  );
 
 const jsiCore = global as unknown as {
   multiply(a: number, b: number): number;

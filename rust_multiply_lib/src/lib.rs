@@ -1,4 +1,4 @@
-#[no_mangle]
-pub extern "C" fn multiply(a: f64, b: f64) -> f64 {
+#[no_mangle] pub extern "C"
+fn rust_multiply(a: f64, b: f64) -> f64 {
     a * b
 }

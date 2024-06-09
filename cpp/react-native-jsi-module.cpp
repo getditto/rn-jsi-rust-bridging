@@ -1,16 +1,15 @@
-#include <jsi/jsi.h>
 #include "react-native-jsi-module.h"
 
 extern "C"
 {
-  double multiply(double a, double b); // Declaration of the Rust function
+  // For instance, C++'s `double` type is the equivalent of Rust's `f64`
+  double rust_multiply(double a, double b);
 }
 
 namespace jsimodule
 {
   void bridgeJSIFunctions(Runtime &jsi)
   {
-    // Define `multiplyJSI` using JSI idioms.
     auto multiplyJSI = Function::createFromHostFunction(
         jsi,
         PropNameID::forAscii(jsi, "multiplyJSI"),
@@ -25,10 +24,11 @@ namespace jsimodule
           double a = arguments[0].asNumber();
           double b = arguments[1].asNumber();
 
-          return multiply(a, b);
+          double ret = rust_multiply(a, b);
+
+          return Value(ret);
         });
 
-    // Export the `multiply` function to React Native's global object
     jsi.global().setProperty(jsi, "multiply", std::move(multiplyJSI));
   }
 

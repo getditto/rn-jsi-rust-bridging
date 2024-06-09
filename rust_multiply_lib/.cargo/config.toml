@@ -1,0 +1,16 @@
+# Convenience shorthands.
+[alias]
+build-ios = ["build", "--target", "aarch64-apple-ios"]
+build-android = ["build", "--target", "aarch64-linux-android"]
+
+# Linker configuration settings.
+[target.aarch64-apple-ios]
+rustflags = [
+  "-C", "link-arg=-isysroot", "-C", "link-arg=$(xcrun --sdk iphoneos --show-sdk-path)",
+  "-C", "link-arg=-arch", "-C", "link-arg=arm64",
+  "-C", "link-arg=-mios-version-min=10.0"
+]
+
+[target.aarch64-linux-android]
+linker = "aarch64-linux-android21-clang"
+ar = "aarch64-linux-android-ar"
